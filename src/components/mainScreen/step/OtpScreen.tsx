@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import Action from '../../common/Action';
 
 export default function OtpScreen({ setScreen }: any) {
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState('1234');
 
   return (
     <View style={styles.container}>

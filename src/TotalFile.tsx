@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import AstrologySplash from './components/mainScreen/AstrologySplash';
+import AstrologySplash from './components/mainScreen/splash/AstrologySplash';
 import OnboardingFlow from './components/mainScreen/step/index';
-import HomeScreen from './components/common/HomeScreen';
+import HomeScreen from './components/mainScreen/HomeScreen/HomeScreen';
 
 export default function TotalFile() {
   const [showSplash, setShowSplash] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showOnboardingComplete, setShowOnboardingComplete] = useState(false);
 
   useEffect(() => {
     // Hide splash screen after 3 seconds
@@ -19,13 +18,10 @@ export default function TotalFile() {
     return () => clearTimeout(timer);
   }, []);
 
-
-
   return (
     <View style={{ flex: 1 }}>
       {showSplash && <AstrologySplash />}
       {showOnboarding && <OnboardingFlow />}
-      {showOnboardingComplete && <HomeScreen />}
     </View>
   );
 }

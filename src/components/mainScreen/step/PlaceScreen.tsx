@@ -4,7 +4,7 @@ import Action from '../../common/Action';
 
 
 export default function PlaceScreen({ setScreen }: any) {
-  const [place, setPlace] = useState('');
+  const [place, setPlace] = useState('Lucknow');
 
   return (
     <View style={styles.container}>

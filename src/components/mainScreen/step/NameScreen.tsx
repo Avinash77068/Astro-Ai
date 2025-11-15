@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import Action from '../../common/Action';
 
 export default function NameScreen({ setScreen }: any) {
-  const [name, setName] = useState('');
+  const [name, setName] = useState('Avinash');
 
   return (
     <View style={styles.container}>

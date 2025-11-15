@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import Action from '../../common/Action';
 
 export default function DobScreen({ setScreen }: any) {
-  const [dob, setDob] = useState('');
+  const [dob, setDob] = useState('12/2/2003');
 
   return (
     <View style={styles.container}>

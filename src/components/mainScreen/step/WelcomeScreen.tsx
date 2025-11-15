@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, TextInput, StyleSheet } from 'react-native';
 import Action from '../../common/Action';
 
 export default function WelcomeScreen({ setScreen, formData, setFormData }: any) {
-  const [error, setError] = useState('7706896765');
+  const [error, setError] = useState('');
 
   const handleMobileChange = (text: string) => {
     const cleaned = text.replace(/[^0-9]/g, '').slice(0, 10);

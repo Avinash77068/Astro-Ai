@@ -4,7 +4,7 @@ import Action from '../../common/Action';
 
 
 export default function GenderScreen({ setScreen }: any) {
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('Male');
 
   return (
     <View style={styles.container}>
