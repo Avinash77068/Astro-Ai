@@ -7,7 +7,13 @@ import {
   StyleSheet,
 } from 'react-native';
 import { BlurView } from '@react-native-community/blur';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../../navigation/AppNavigator';
 import Sidebar from '../../common/Sidebar';
+import CommonFooter from '../../common/CommonFooter';
+import CommonHeader from '../../common/CommonHeader';
+
 
 const styles = StyleSheet.create({
   absolute: {
@@ -40,21 +46,16 @@ const styles = StyleSheet.create({
   },
 });
 
-// 🌟 SORTED FEATURE CARDS ARRAY
+// Feature Cards
 const homeCards = [
-  // MAIN FEATURES
   { title: 'Love Calculation', icon: '❤️', href: '/love-calculation' },
   { title: 'Future Prediction', icon: '🔮', href: '/future-prediction' },
   { title: 'Kundli Mini', icon: '🕉️', href: '/kundli-mini' },
   { title: 'Baby Name', icon: '👶', href: '/baby-name' },
   { title: 'Lucky Child', icon: '🌞', href: '/lucky-child' },
-
-  // RASHI
   { title: 'Today', icon: '📅', href: '/daily-rashi' },
   { title: 'Week', icon: '📆', href: '/weekly-rashi' },
   { title: 'Month', icon: '🗓', href: '/monthly-rashi' },
-
-  // FOOTER TOOLS
   { title: 'Tools', icon: '🛠', href: '/tools' },
   { title: 'Career', icon: '💼', href: '/career' },
   { title: 'Account', icon: '👤', href: '/account' },
@@ -62,6 +63,29 @@ const homeCards = [
 
 export default function HomeScreen() {
   const [menu, setMenu] = useState(false);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleCardPress = (item: { title: string; icon: string; href: string }) => {
+    // Map of special routes that have their own screens
+    const specialRoutes: { [key: string]: keyof RootStackParamList } = {
+      '/love-calculation': 'LoveCalculation',
+      '/predictions': 'Predictions',
+      '/account': 'Account',
+    };
+
+    const routeName = specialRoutes[item.href];
+    
+    if (routeName) {
+      // Use type assertion to ensure TypeScript understands this is a valid route
+      navigation.navigate(routeName as any);
+    } else {
+      // Fallback to FeaturePage for other routes
+      navigation.navigate('FeaturePage', {
+        title: item.title,
+        icon: item.icon,
+      });
+    }
+  };
 
   const cardStyle = {
     width: '48%' as const,
@@ -97,54 +121,19 @@ export default function HomeScreen() {
         <Sidebar onClose={() => setMenu(false)} />
       </View>
 
-      {/* Header */}
-      <View style={{ padding: 20, paddingTop: 50 }}>
-        <TouchableOpacity onPress={() => setMenu(!menu)}>
-          <Text style={{ color: '#fff', fontSize: 22 }}>☰</Text>
-        </TouchableOpacity>
+      {/* Common Header */}
+      <CommonHeader
+        title="आज का ज्योतिष"
+        onMenu={() => setMenu(!menu)}
+        paragraph="Welcome, Avinash"
+        icon="☰"
+      />
 
-        <Text
-          style={{
-            fontSize: 28,
-            color: '#fff',
-            fontWeight: 'bold',
-            marginTop: 10,
-          }}
-        >
-          आज का ज्योतिष
-        </Text>
-
-        <Text style={{ color: '#ddd', marginTop: 5, fontSize: 16 }}>
-          Welcome, Avinash 👋
-        </Text>
-      </View>
-
-      {/* GRID CARDS */}
+      {/* Body GRID */}
       <ScrollView style={{ paddingHorizontal: 20 }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-          }}
-        >
-          {homeCards.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={cardStyle}
-              onPress={() => console.log('Navigate to:', item.href)}
-            >
-              <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
-                {item.icon} {item.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
         {/* DAILY TIPS */}
         <Text
           style={{
-            marginTop: 20,
             fontSize: 22,
             color: '#fff',
             fontWeight: 'bold',
@@ -156,16 +145,72 @@ export default function HomeScreen() {
         <View
           style={{
             marginTop: 15,
+            marginBottom: 15,
             padding: 20,
             borderRadius: 18,
             backgroundColor: '#ffffff15',
           }}
         >
-          <Text style={{ color: '#fff' }}>• Lucky Color: Indigo</Text>
-          <Text style={{ color: '#fff' }}>• Mantra: Om Namah Shivaya</Text>
-          <Text style={{ color: '#fff' }}>• Remedy: Light a ghee lamp</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+            <Text style={{ color: '#fff', width: '50%' }}>
+              • Lucky Color: Indigo
+            </Text>
+            <Text style={{ color: '#fff', width: '50%' }}>
+              • Mantra: Om Namah Shivaya
+            </Text>
+            <Text style={{ color: '#fff', width: '50%' }}>
+              • Remedy: Light a ghee lamp
+            </Text>
+            <Text style={{ color: '#fff', width: '50%' }}>
+              • Lucky Number: 7
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+          }}
+        >
+          {homeCards.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={cardStyle}
+              onPress={() => handleCardPress(item)}
+            >
+              <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>
+                {item.icon} {item.title}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </ScrollView>
+<CommonFooter onClick={() => navigation.navigate('Home')}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Text style={{ color: '#fff', fontSize: 24 }}>🏠</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FeaturePage', { 
+              title: 'Tools', 
+              icon: '🛠️' 
+            })}
+          >
+            <Text style={{ color: '#fff', fontSize: 24 }}>🛠️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Predictions')}
+          >
+            <Text style={{ color: '#fff', fontSize: 24 }}>💬</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Account')}
+          >
+            <Text style={{ color: '#fff', fontSize: 24 }}>👤</Text>
+          </TouchableOpacity>
+        </View>
+      </CommonFooter>
     </View>
   );
 }
