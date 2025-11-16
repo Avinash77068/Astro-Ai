@@ -9,10 +9,12 @@ import {
   Platform,
   ScrollView,
   Image,
+  Animated,
+  Easing,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CallInterface from '../ call/CallInterface';
 
 type Message = {
   id: string;
@@ -25,7 +27,13 @@ type Message = {
 
 export default function ChatScreen({ route, navigation }: any) {
   const { astrologer } = route.params;
+  const [callState, setCallState] = useState<'idle' | 'ringing' | 'in-call'>('idle');
+  const [callDuration, setCallDuration] = useState(0);
   const [message, setMessage] = useState('');
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.8)).current;
+  const ringtoneRef = useRef<any>(null);
+  const rippleAnim = useRef(new Animated.Value(0)).current;
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -36,6 +44,89 @@ export default function ChatScreen({ route, navigation }: any) {
   ]);
 
   const scrollViewRef = useRef<ScrollView>(null);
+
+  const startCall = () => {
+    setCallState('ringing');
+    
+    // Show calling UI
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 300,
+        easing: Easing.out(Easing.back(1.5)),
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Start ripple animation
+    const ripple = Animated.loop(
+      Animated.sequence([
+        Animated.timing(rippleAnim, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rippleAnim, {
+          toValue: 0,
+          duration: 0,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    ripple.start();
+
+    // Simulate call being answered after 2-4 seconds
+    const answerTime = 2000 + Math.random() * 2000;
+    ringtoneRef.current = setTimeout(() => {
+      ripple.stop();
+      setCallState('in-call');
+      const startTime = Date.now();
+      const timer = setInterval(() => {
+        setCallDuration(Math.floor((Date.now() - startTime) / 1000));
+      }, 1000);
+      return () => clearInterval(timer);
+    }, answerTime);
+
+    return () => {
+      ripple.stop();
+      if (ringtoneRef.current) {
+        clearTimeout(ringtoneRef.current);
+      }
+    };
+  };
+
+  const endCall = () => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 0.8,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(rippleAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setCallState('idle');
+      setCallDuration(0);
+      if (ringtoneRef.current) {
+        clearTimeout(ringtoneRef.current);
+      }
+    });
+  };
+
+
 
   const handleSend = () => {
     if (message.trim() === '') return;
@@ -97,7 +188,10 @@ export default function ChatScreen({ route, navigation }: any) {
             </View>
           </View>
           <View style={styles.headerIcons}>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity 
+              style={styles.iconButton}
+              onPress={startCall}
+            >
               <Text style={styles.iconText}>📞</Text>
             </TouchableOpacity>
           </View>
@@ -144,6 +238,17 @@ export default function ChatScreen({ route, navigation }: any) {
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
+
+        {/* Call Interface */}
+        <CallInterface
+          astrologer={astrologer}
+          callState={callState}
+          callDuration={callDuration}
+          onEndCall={endCall}
+          rippleAnim={rippleAnim}
+          fadeAnim={fadeAnim}
+          scaleAnim={scaleAnim}
+        />
       </View>
     </SafeAreaView>
   );
@@ -219,4 +324,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sendButtonText: { color: '#000', fontWeight: 'bold' },
+  
 });
