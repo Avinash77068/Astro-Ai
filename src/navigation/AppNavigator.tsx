@@ -5,13 +5,28 @@ import HomeScreen from '../components/mainScreen/HomeScreen/HomeScreen';
 import LoveCalculationScreen from '../screens/LoveCalculation/LoveCalculationScreen';
 import PredictionsScreen from '../screens/Predictions/PredictionsScreen';
 import AccountScreen from '../screens/Account/AccountScreen';
+import ChatScreen from '../screens/Chat/ChatScreen';
 import FeaturePage from '../pages/FeaturePage';
+
+type Astrologer = {
+  id: number;
+  name: string;
+  online: boolean;
+  experience: number;
+  languages: string[];
+  specialization: string[];
+  rate: number;
+  avatar: string;
+};
 
 export type RootStackParamList = {
   Home: undefined;
   LoveCalculation: undefined;
   Predictions: undefined;
   Account: undefined;
+  Chat: {
+    astrologer: Astrologer;
+  };
   FeaturePage: {
     title: string;
     icon: string;
@@ -53,12 +68,20 @@ export default function AppNavigator() {
         <Stack.Screen 
           name="Predictions" 
           component={PredictionsScreen} 
-          options={{ title: 'Predictions' }}
+          options={{ title: 'Chat Now' }}
         />
         <Stack.Screen 
           name="Account" 
           component={AccountScreen} 
           options={{ title: 'My Account' }}
+        />
+        <Stack.Screen 
+          name="Chat" 
+          component={ChatScreen} 
+          options={({ route }) => ({
+            title: route.params?.astrologer.name || 'Chat',
+            headerShown: false,
+          })}
         />
         <Stack.Screen 
           name="FeaturePage" 
