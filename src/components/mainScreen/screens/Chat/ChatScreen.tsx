@@ -23,17 +23,18 @@ type Message = {
   time: string;
 };
 
-
-
 export default function ChatScreen({ route, navigation }: any) {
   const { astrologer } = route.params;
   const [callState, setCallState] = useState<'idle' | 'ringing' | 'in-call'>('idle');
   const [callDuration, setCallDuration] = useState(0);
   const [message, setMessage] = useState('');
+
+  // Animation refs
+  // Animation refs
+  const rippleAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const ringtoneRef = useRef<any>(null);
-  const rippleAnim = useRef(new Animated.Value(0)).current;
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -44,6 +45,45 @@ export default function ChatScreen({ route, navigation }: any) {
   ]);
 
   const scrollViewRef = useRef<ScrollView>(null);
+
+  // Handle call state changes and animations
+  useEffect(() => {
+    if (callState === 'ringing' || callState === 'in-call') {
+      // Start ripple animation
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(rippleAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(rippleAnim, {
+            toValue: 0,
+            duration: 0,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+
+      // Fade in the call interface
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+
+      // Scale in the call interface
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      // Reset animations when call ends
+      fadeAnim.setValue(0);
+      scaleAnim.setValue(0.8);
+      rippleAnim.setValue(0);
+    }
+  }, [callState]);
 
   const startCall = () => {
     setCallState('ringing');
@@ -165,91 +205,86 @@ export default function ChatScreen({ route, navigation }: any) {
   }, [messages]);
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: '#1A0855' }}
-      edges={['top', 'bottom']}
-    >
-      <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Text style={styles.backButtonText}>←</Text>
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <Image source={{ uri: astrologer.avatar }} style={styles.avatar} />
-            <View>
-              <Text style={styles.astrologerName}>{astrologer.name}</Text>
-              <Text style={styles.astrologerStatus}>
-                {astrologer.online ? 'Online' : 'Offline'}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.headerIcons}>
-            <TouchableOpacity 
-              style={styles.iconButton}
-              onPress={startCall}
-            >
-              <Text style={styles.iconText}>📞</Text>
-            </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Text style={styles.backButtonText}>←</Text>
+        </TouchableOpacity>
+        <View style={styles.headerContent}>
+          <Image source={{ uri: astrologer.avatar }} style={styles.avatar} />
+          <View>
+            <Text style={styles.astrologerName}>{astrologer.name}</Text>
+            <Text style={styles.astrologerStatus}>
+              {astrologer.online ? 'Online' : 'Offline'}
+            </Text>
           </View>
         </View>
-
-        {/* Chat Messages */}
-        <ScrollView
-          ref={scrollViewRef}
-          style={styles.messagesContainer}
-          contentContainerStyle={{ padding: 16 }}
-        >
-          {messages.map(msg => (
-            <View
-              key={msg.id}
-              style={[
-                styles.messageBubble,
-                msg.sender === 'user'
-                  ? styles.userBubble
-                  : styles.astrologerBubble,
-              ]}
-            >
-              <Text style={styles.messageText}>{msg.text}</Text>
-              <Text style={styles.timeText}>{msg.time}</Text>
-            </View>
-          ))}
-        </ScrollView>
-
-        {/* Message Input */}
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-        >
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              value={message}
-              onChangeText={setMessage}
-              placeholder="Type your message..."
-              placeholderTextColor="#888"
-              multiline
-            />
-            <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-              <Text style={styles.sendButtonText}>Send</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-
-        {/* Call Interface */}
-        <CallInterface
-          astrologer={astrologer}
-          callState={callState}
-          callDuration={callDuration}
-          onEndCall={endCall}
-          rippleAnim={rippleAnim}
-          fadeAnim={fadeAnim}
-          scaleAnim={scaleAnim}
-        />
+        <View style={styles.headerIcons}>
+          <TouchableOpacity style={styles.iconButton} onPress={startCall}>
+            <Text style={styles.iconText}>📞</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconButton} onPress={startCall}>
+            <Text style={styles.iconText}>📹</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {/* Chat Messages */}
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.messagesContainer}
+        contentContainerStyle={{ padding: 16 }}
+      >
+        {messages.map(msg => (
+          <View
+            key={msg.id}
+            style={[
+              styles.messageBubble,
+              msg.sender === 'user'
+                ? styles.userBubble
+                : styles.astrologerBubble,
+            ]}
+          >
+            <Text style={styles.messageText}>{msg.text}</Text>
+            <Text style={styles.timeText}>{msg.time}</Text>
+          </View>
+        ))}
+      </ScrollView>
+
+      {/* Message Input */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      >
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={message}
+            onChangeText={setMessage}
+            placeholder="Type your message..."
+            placeholderTextColor="#888"
+            multiline
+          />
+          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+            <Text style={styles.sendButtonText}>Send</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+
+      {/* Call Interface */}
+      <CallInterface
+        astrologer={astrologer}
+        callState={callState}
+        callDuration={callDuration}
+        rippleAnim={rippleAnim}
+        fadeAnim={fadeAnim}
+        scaleAnim={scaleAnim}
+        onEndCall={endCall}
+      />
     </SafeAreaView>
   );
 }

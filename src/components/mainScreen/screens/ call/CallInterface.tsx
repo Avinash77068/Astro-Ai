@@ -7,13 +7,12 @@ import {
   TouchableOpacity,
   Animated,
 } from 'react-native';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Animated, { Easing } from 'react-native-reanimated';
 
 type CallInterfaceProps = {
   astrologer: {
     name: string;
     avatar: string;
+    online?: boolean;
   };
   callState: 'idle' | 'ringing' | 'in-call';
   callDuration: number;
@@ -21,9 +20,6 @@ type CallInterfaceProps = {
   rippleAnim: Animated.Value;
   fadeAnim: Animated.Value;
   scaleAnim: Animated.Value;
-  rippleAnim: any;
-  fadeAnim: any;
-  scaleAnim: any;
 };
 
 const CallInterface: React.FC<CallInterfaceProps> = ({
@@ -38,9 +34,6 @@ const CallInterface: React.FC<CallInterfaceProps> = ({
   const formatCallTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs
-      .toString()
-      .padStart(2, '0')}`;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
@@ -48,7 +41,6 @@ const CallInterface: React.FC<CallInterfaceProps> = ({
 
   return (
     <Animated.View
-    <Animated.View 
       style={[
         styles.callContainer,
         {

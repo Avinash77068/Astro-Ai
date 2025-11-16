@@ -116,7 +116,10 @@ export default function HomeScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('FeaturePage', { title: 'Tools', icon: '🛠️' })
+              navigation.navigate('FeaturePage', {
+                title: 'Tools',
+                icon: '🛠️',
+              })
             }
           >
             <Text style={{ color: '#fff', fontSize: 24 }}>🛠️</Text>
