@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import AstrologySplash from './components/mainScreen/SplashScree/SplashScree';
 import OnboardingFlow from './components/mainScreen/OnboardingFlow/index';
 
-
 export default function TotalFile() {
   const [showSplash, setShowSplash] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
