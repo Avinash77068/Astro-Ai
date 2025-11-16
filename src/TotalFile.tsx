@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import AstrologySplash from './components/mainScreen/splash/AstrologySplash';
-import OnboardingFlow from './components/mainScreen/step/index';
+import AstrologySplash from './components/mainScreen/SplashScree/SplashScree';
+import OnboardingFlow from './components/mainScreen/OnboardingFlow/index';
 import HomeScreen from './components/mainScreen/HomeScreen/HomeScreen';
 
 export default function TotalFile() {

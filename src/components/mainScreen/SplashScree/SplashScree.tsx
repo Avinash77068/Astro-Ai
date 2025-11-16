@@ -1,8 +1,17 @@
 
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import { useEffect } from 'react';
 
-export default function AstrologySplash() {
+
+export default function SplashScree({navigation}: any) {
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('onboarding');
+    }, 3000);
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.content}>

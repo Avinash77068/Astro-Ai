@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/AppNavigator';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Message = {
@@ -21,9 +21,9 @@ type Message = {
   time: string;
 };
 
-type ChatScreenProps = NativeStackScreenProps<RootStackParamList, 'Chat'>;
 
-export default function ChatScreen({ route, navigation }: ChatScreenProps) {
+
+export default function ChatScreen({ route, navigation }: any) {
   const { astrologer } = route.params;
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([
