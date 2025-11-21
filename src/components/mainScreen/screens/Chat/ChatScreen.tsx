@@ -15,17 +15,21 @@ import {
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CallInterface from '../ call/CallInterface';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 type Message = {
   id: string;
-  text: string;
+  text?: string;
+  image?: string;
   sender: 'user' | 'astrologer';
   time: string;
 };
 
 export default function ChatScreen({ route, navigation }: any) {
   const { astrologer } = route.params;
-  const [callState, setCallState] = useState<'idle' | 'ringing' | 'in-call'>('idle');
+  const [callState, setCallState] = useState<'idle' | 'ringing' | 'in-call'>(
+    'idle',
+  );
   const [callDuration, setCallDuration] = useState(0);
   const [message, setMessage] = useState('');
 
@@ -62,7 +66,7 @@ export default function ChatScreen({ route, navigation }: any) {
             duration: 0,
             useNativeDriver: true,
           }),
-        ])
+        ]),
       ).start();
 
       // Fade in the call interface
@@ -87,7 +91,7 @@ export default function ChatScreen({ route, navigation }: any) {
 
   const startCall = () => {
     setCallState('ringing');
-    
+
     // Show calling UI
     Animated.parallel([
       Animated.timing(fadeAnim, {
@@ -116,7 +120,7 @@ export default function ChatScreen({ route, navigation }: any) {
           duration: 0,
           useNativeDriver: true,
         }),
-      ])
+      ]),
     );
     ripple.start();
 
@@ -166,8 +170,6 @@ export default function ChatScreen({ route, navigation }: any) {
     });
   };
 
-
-
   const handleSend = () => {
     if (message.trim() === '') return;
 
@@ -184,7 +186,6 @@ export default function ChatScreen({ route, navigation }: any) {
     setMessages(prev => [...prev, newMessage]);
     setMessage('');
 
-    // Simulate astrologer reply
     setTimeout(() => {
       const reply: Message = {
         id: (Date.now() + 1).toString(),
@@ -199,10 +200,31 @@ export default function ChatScreen({ route, navigation }: any) {
     }, 1000);
   };
 
-  // Scroll to bottom when messages update
   useEffect(() => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
   }, [messages]);
+  // 📌 NEW FUNCTION  // added
+  const pickImage = () => {
+    launchImageLibrary({ mediaType: 'photo', quality: 0.7 }, response => {
+      if (response.didCancel) return;
+      if (response.errorMessage) return;
+
+      const uri = response.assets?.[0]?.uri;
+      if (!uri) return;
+
+      const newMessage: Message = {
+        id: Date.now().toString(),
+        image: uri, // added
+        sender: 'user',
+        time: new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      };
+
+      setMessages(prev => [...prev, newMessage]);
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -249,7 +271,24 @@ export default function ChatScreen({ route, navigation }: any) {
                 : styles.astrologerBubble,
             ]}
           >
-            <Text style={styles.messageText}>{msg.text}</Text>
+            {/* 📌 TEXT MESSAGE  // added */}
+            {msg.text ? (
+              <Text style={styles.messageText}>{msg.text}</Text>
+            ) : null}
+
+            {/* 📌 IMAGE MESSAGE  // added */}
+            {msg.image ? (
+              <Image
+                source={{ uri: msg.image }}
+                style={{
+                  width: 200,
+                  height: 200,
+                  borderRadius: 12,
+                  marginBottom: 6,
+                }}
+              />
+            ) : null}
+
             <Text style={styles.timeText}>{msg.time}</Text>
           </View>
         ))}
@@ -261,6 +300,22 @@ export default function ChatScreen({ route, navigation }: any) {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
         <View style={styles.inputContainer}>
+          {/* 📌 IMAGE UPLOAD BUTTON  // added */}
+          <TouchableOpacity
+            onPress={pickImage}
+            style={{
+              marginRight: 8,
+              backgroundColor: '#2D1B69',
+              width: 45,
+              height: 45,
+              borderRadius: 22,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ color: '#fff', fontSize: 22 }}>📷</Text>
+          </TouchableOpacity>
+
           <TextInput
             style={styles.input}
             value={message}
@@ -269,6 +324,7 @@ export default function ChatScreen({ route, navigation }: any) {
             placeholderTextColor="#888"
             multiline
           />
+
           <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
             <Text style={styles.sendButtonText}>Send</Text>
           </TouchableOpacity>
@@ -359,5 +415,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sendButtonText: { color: '#000', fontWeight: 'bold' },
-  
 });
