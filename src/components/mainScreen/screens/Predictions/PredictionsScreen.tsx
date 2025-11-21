@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../../navigation/AppNavigator';
+import { astrologers } from '../../../mockData/mockData';
 
 type Astrologer = {
   id: number;
@@ -22,48 +24,7 @@ type Astrologer = {
   avatar: string;
 };
 
-const astrologers = [
-  {
-    id: 1,
-    name: 'Aarav Sharma',
-    online: true,
-    experience: 8,
-    languages: ['Hindi', 'English'],
-    specialization: ['Vedic', 'Numerology'],
-    rate: 22,
-    avatar: 'https://i.pravatar.cc/150?img=12',
-  },
-  {
-    id: 2,
-    name: 'Priya Verma',
-    online: false,
-    experience: 5,
-    languages: ['Hindi'],
-    specialization: ['Love', 'Tarot'],
-    rate: 15,
-    avatar: 'https://git-scm.com/images/icons/nav-read-book.png',
-  },
-  {
-    id: 3,
-    name: 'Rahul Joshi',
-    online: true,
-    experience: 12,
-    languages: ['English'],
-    specialization: ['Kundli', 'Vedic'],
-    rate: 30,
-    avatar: 'https://i.pravatar.cc/150?img=54',
-  },
-  {
-    id: 4,
-    name: 'Neha Anand',
-    online: true,
-    experience: 4,
-    languages: ['Hindi', 'English'],
-    specialization: ['Numerology'],
-    rate: 18,
-    avatar: 'https://i.pravatar.cc/150?img=34',
-  },
-];
+
 
 export default function AstrologersListScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -216,7 +177,7 @@ export default function AstrologersListScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#1A0855' },
-  content: { padding: 20 },
+  content: { padding: 12 },
 
   title: { fontSize: 28, color: '#fff', fontWeight: 'bold' },
   subtitle: { color: '#ffffff90', marginBottom: 20 },

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { HomeIcon, UserIcon, ToolIcon } from './IconSet';
 
-export default function Sidebar({ onClose }: { onClose: () => void }) {
+export default function Sidebar({ onClose, navigation }: { onClose: () => void, navigation: any }) {
   return (
     <View
       style={{
@@ -16,16 +16,16 @@ export default function Sidebar({ onClose }: { onClose: () => void }) {
         Menu
       </Text>
 
-      <TouchableOpacity style={{ flexDirection: 'row', marginTop: 30 }}>
+      <TouchableOpacity style={{ flexDirection: 'row', marginTop: 30 }} onPress={() => {navigation.navigate('Home')}}>
         <HomeIcon size={28} color="#9C8BFF" />
-        <Text style={{ color: '#fff', marginLeft: 15, fontSize: 18 }}>
+        <Text style={{ color: '#fff', marginLeft: 15, fontSize: 18 }} >
           Home
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{ flexDirection: 'row', marginTop: 25 }}>
+      <TouchableOpacity style={{ flexDirection: 'row', marginTop: 25 }} onPress={() => {navigation.navigate('ProfileScreen')}}>
         <UserIcon size={28} color="#9C8BFF" />
-        <Text style={{ color: '#fff', marginLeft: 15, fontSize: 18 }}>
+        <Text style={{ color: '#fff', marginLeft: 15, fontSize: 18 }} >
           My Profile
         </Text>
       </TouchableOpacity>

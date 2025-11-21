@@ -1,0 +1,122 @@
+export const homeCards = [
+  { title: 'Love Calculation', icon: '❤️', href: '/love-calculation' },
+  { title: 'Future Prediction', icon: '🔮', href: '/future-prediction' },
+  { title: 'Kundli Mini', icon: '🕉️', href: '/kundli-mini' },
+  { title: 'Baby Name', icon: '👶', href: '/baby-name' },
+  { title: 'Lucky Child', icon: '🌞', href: '/lucky-child' },
+  { title: 'Today', icon: '📅', href: '/daily-rashi' },
+  { title: 'Week', icon: '📆', href: '/weekly-rashi' },
+  { title: 'Month', icon: '🗓', href: '/monthly-rashi' },
+  { title: 'Tools', icon: '🛠', href: '/tools' },
+  { title: 'Career', icon: '💼', href: '/career' },
+  { title: 'Account', icon: '👤', href: '/account' },
+];
+
+export const luckyItems = [
+  { label: 'Lucky Color', value: 'Indigo' },
+  { label: 'Mantra', value: 'Om Namah Shivaya' },
+  { label: 'Remedy', value: 'Light a ghee lamp' },
+  { label: 'Lucky Number', value: '7' },
+];
+
+export const astrologers = [
+  {
+    id: 1,
+    name: 'Aarav Sharma',
+    online: true,
+    experience: 8,
+    languages: ['Hindi', 'English'],
+    specialization: ['Vedic', 'Numerology'],
+    rate: 22,
+    avatar: 'https://i.pravatar.cc/150?img=12',
+    price: '₹11/min',
+  },
+  {
+    id: 2,
+    name: 'Mr. Krishnam...',
+    online: false,
+    experience: 5,
+    languages: ['Hindi'],
+    specialization: ['Love', 'Tarot'],
+    rate: 15,
+    avatar:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop',
+  },
+  {
+    id: 3,
+    name: 'Love Guru',
+    online: true,
+    experience: 12,
+    languages: ['English'],
+    specialization: ['Kundli', 'Vedic'],
+    rate: 30,
+    avatar:
+      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop',
+  },
+  {
+    id: 4,
+    name: 'Swami Ji',
+    online: true,
+    experience: 4,
+    languages: ['Hindi', 'English'],
+    specialization: ['Numerology'],
+    rate: 18,
+    avatar:
+      'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=150&h=150&fit=crop',
+  },
+  {
+    id: 5,
+    name: 'Astro Ananya',
+    online: true,
+    experience: 4,
+    languages: ['Hindi', 'English'],
+    specialization: ['Numerology'],
+    rate: 18,
+    avatar:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
+  },
+  {
+    id: 6,
+    name: 'Dr. Raman',
+    online: true,
+    experience: 4,
+    languages: ['Hindi', 'English'],
+    specialization: ['Numerology'],
+    rate: 18,
+    avatar:
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop',
+  },
+  {
+    id: 7,
+    name: 'Acharya Joshi',
+    online: true,
+    experience: 4,
+    languages: ['Hindi', 'English'],
+    specialization: ['Numerology'],
+    rate: 18,
+    avatar:
+      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop',
+  },
+  {
+    id: 8,
+    name: 'Love Oracle',
+    online: true,
+    experience: 4,
+    languages: ['Hindi', 'English'],
+    specialization: ['Numerology'],
+    rate: 18,
+    avatar:
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop',
+  },
+  {
+    id: 9,
+    name: 'Guru Anil',
+    online: true,
+    experience: 4,
+    languages: ['Hindi', 'English'],
+    specialization: ['Numerology'],
+    rate: 18,
+    avatar:
+      'https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop',
+  },
+];

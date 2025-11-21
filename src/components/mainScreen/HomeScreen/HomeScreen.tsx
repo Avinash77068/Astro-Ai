@@ -1,34 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../../navigation/AppNavigator';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import Sidebar from '../../common/Sidebar';
 import CommonFooter from '../../common/CommonFooter';
 import CommonHeader from '../../common/CommonHeader';
-
-
-const homeCards = [
-  { title: 'Love Calculation', icon: '❤️', href: '/love-calculation' },
-  { title: 'Future Prediction', icon: '🔮', href: '/future-prediction' },
-  { title: 'Kundli Mini', icon: '🕉️', href: '/kundli-mini' },
-  { title: 'Baby Name', icon: '👶', href: '/baby-name' },
-  { title: 'Lucky Child', icon: '🌞', href: '/lucky-child' },
-  { title: 'Today', icon: '📅', href: '/daily-rashi' },
-  { title: 'Week', icon: '📆', href: '/weekly-rashi' },
-  { title: 'Month', icon: '🗓', href: '/monthly-rashi' },
-  { title: 'Tools', icon: '🛠', href: '/tools' },
-  { title: 'Career', icon: '💼', href: '/career' },
-  { title: 'Account', icon: '👤', href: '/account' },
-];
-
-const luckyItems = [
-  { label: 'Lucky Color', value: 'Indigo' },
-  { label: 'Mantra', value: 'Om Namah Shivaya' },
-  { label: 'Remedy', value: 'Light a ghee lamp' },
-  { label: 'Lucky Number', value: '7' },
-];
+import { BlurView } from '@react-native-community/blur';
+import { useNavigation } from '@react-navigation/native';
+import AIAstrologers from '../screens/ai-astro/AIAstrologers';
+import { homeCards, luckyItems } from '../../mockData/mockData';
+import { RootStackParamList } from '../../../navigation/AppNavigator';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export default function HomeScreen() {
   const [menu, setMenu] = useState(false);
@@ -72,17 +58,16 @@ export default function HomeScreen() {
           />
         </TouchableOpacity>
       )}
-
       <View style={[styles.sidebarContainer, { left: menu ? 0 : -260 }]}>
-        <Sidebar onClose={() => setMenu(false)} />
+        <Sidebar onClose={() => setMenu(false)} navigation={navigation} />
       </View>
-
       <CommonHeader
         title="आज का ज्योतिष"
         onMenu={() => setMenu(!menu)}
         paragraph="Welcome, Avinash"
         icon="☰"
       />
+      <AIAstrologers navigation={navigation} />
       <ScrollView style={{ paddingHorizontal: 20 }}>
         <Text style={styles.dailyTipsTitle}>DAILY TIPS</Text>
         <View style={styles.dailyTipsContainer}>
@@ -125,7 +110,9 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={() => navigation.navigate('Predictions')}>
             <Text style={{ color: '#fff', fontSize: 24 }}>💬</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ProfileScreen')}
+          >
             <Text style={{ color: '#fff', fontSize: 24 }}>👤</Text>
           </TouchableOpacity>
         </View>
