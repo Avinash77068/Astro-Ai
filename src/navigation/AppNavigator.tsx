@@ -31,6 +31,7 @@ export type RootStackParamList = {
     title: string;
     icon: string;
   };
+  ProfileScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -40,6 +41,7 @@ import LoveCalculationScreen from '../components/mainScreen/screens/LoveCalculat
 import PredictionsScreen from '../components/mainScreen/screens/Predictions/PredictionsScreen';
 import AccountScreen from '../components/mainScreen/screens/Account/AccountScreen';
 import ChatScreen from '../components/mainScreen/screens/Chat/ChatScreen';
+import ProfileScreen from '../components/mainScreen/ProfileScreen';
 
 const screenOptions: NativeStackNavigationOptions = {
   headerShown: true,
@@ -96,6 +98,11 @@ export default function AppNavigator() {
             title: route.params?.astrologer.name || 'Chat',
             headerShown: false,
           })}
+        />
+        <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{ title: 'Profile' }}
         />
         <Stack.Screen
           name="FeaturePage"

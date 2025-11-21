@@ -83,7 +83,6 @@ export default function HomeScreen() {
         paragraph="Welcome, Avinash"
         icon="☰"
       />
-
       <ScrollView style={{ paddingHorizontal: 20 }}>
         <Text style={styles.dailyTipsTitle}>DAILY TIPS</Text>
         <View style={styles.dailyTipsContainer}>
@@ -108,7 +107,6 @@ export default function HomeScreen() {
           ))}
         </View>
       </ScrollView>
-
       <CommonFooter onClick={() => navigation.navigate('Home')}>
         <View style={styles.footerIconRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -127,7 +125,7 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={() => navigation.navigate('Predictions')}>
             <Text style={{ color: '#fff', fontSize: 24 }}>💬</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
             <Text style={{ color: '#fff', fontSize: 24 }}>👤</Text>
           </TouchableOpacity>
         </View>
