@@ -18,6 +18,14 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    // Network Logger: Log outgoing request
+    console.log('🌐 Network Request:', {
+      method: config.method?.toUpperCase(),
+      url: config.url,
+      headers: config.headers,
+      data: config.data,
+    });
+
     return config;
   },
   error => Promise.reject(error),
@@ -25,8 +33,26 @@ api.interceptors.request.use(
 
 // Response Interceptor
 api.interceptors.response.use(
-  response => response,
+  response => {
+    // Network Logger: Log successful response
+    console.log('✅ Network Response:', {
+      status: response.status,
+      url: response.config.url,
+      method: response.config.method?.toUpperCase(),
+      data: response.data,
+    });
+    return response;
+  },
   async error => {
+    // Network Logger: Log error response
+    console.log('❌ Network Error:', {
+      status: error.response?.status,
+      url: error.config?.url,
+      method: error.config?.method?.toUpperCase(),
+      message: error.message,
+      data: error.response?.data,
+    });
+
     // Handle 401 Unauthorized
     if (error.response?.status === 401) {
       console.warn('Unauthorized - Token may be expired');
