@@ -2,8 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import { STRING } from '../components/constants/string';
-import { Astrologer, RootStackParamList } from '../components/types/astro';
+import { RootStackParamList } from '../components/types/astro';
 import { screenConfigs } from './screenConfigs';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
